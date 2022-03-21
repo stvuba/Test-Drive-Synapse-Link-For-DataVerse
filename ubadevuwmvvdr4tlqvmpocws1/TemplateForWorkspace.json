@@ -1,0 +1,469 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"workspaceName": {
+			"type": "string",
+			"metadata": "Nombre del área de trabajo",
+			"defaultValue": "ubadevuwmvvdr4tlqvmpocws1"
+		},
+		"keyVaultLinkedservice_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "@{concat('https://',linkedService().keyVaultName,'.vault.azure.net/')}"
+		}
+	},
+	"variables": {
+		"workspaceId": "[concat('Microsoft.Synapse/workspaces/', parameters('workspaceName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('workspaceName'), '/keyVaultLinkedservice')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"parameters": {
+					"keyVaultName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('keyVaultLinkedservice_properties_typeProperties_baseUrl')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/AutoResolveIntegrationRuntime')]",
+			"type": "Microsoft.Synapse/workspaces/integrationRuntimes",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "Managed",
+				"typeProperties": {
+					"computeProperties": {
+						"location": "AutoResolve",
+						"dataFlowProperties": {
+							"computeType": "General",
+							"coreCount": 8,
+							"timeToLive": 0
+						}
+					}
+				},
+				"managedVirtualNetwork": {
+					"type": "ManagedVirtualNetworkReference",
+					"referenceName": "default"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/managedVirtualNetworks/default')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/WorkspaceSystemIdentity')]",
+			"type": "Microsoft.Synapse/workspaces/credentials",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "ManagedIdentity",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SelectTop100DataverseAccountTable')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "SELECT TOP (100) [Id]\n,[SinkCreatedOn]\n,[SinkModifiedOn]\n,[statecode]\n,[statuscode]\n,[address1_addresstypecode]\n,[address1_shippingmethodcode]\n,[paymenttermscode]\n,[accountcategorycode]\n,[address1_freighttermscode]\n,[accountratingcode]\n,[preferredappointmenttimecode]\n,[accountclassificationcode]\n,[customertypecode]\n,[ownershipcode]\n,[preferredcontactmethodcode]\n,[territorycode]\n,[industrycode]\n,[businesstypecode]\n,[shippingmethodcode]\n,[address2_addresstypecode]\n,[customersizecode]\n,[address2_shippingmethodcode]\n,[preferredappointmentdaycode]\n,[address2_freighttermscode]\n,[msdyn_gdproptout]\n,[donotpostalmail]\n,[donotsendmm]\n,[creditonhold]\n,[donotbulkpostalmail]\n,[isprivate]\n,[donotbulkemail]\n,[donotfax]\n,[donotemail]\n,[marketingonly]\n,[followemail]\n,[merged]\n,[donotphone]\n,[participatesinworkflow]\n,[slaid]\n,[slaid_entitytype]\n,[transactioncurrencyid]\n,[transactioncurrencyid_entitytype]\n,[createdbyexternalparty]\n,[createdbyexternalparty_entitytype]\n,[slainvokedid]\n,[slainvokedid_entitytype]\n,[originatingleadid]\n,[originatingleadid_entitytype]\n,[territoryid]\n,[territoryid_entitytype]\n,[preferredserviceid]\n,[preferredserviceid_entitytype]\n,[primarycontactid]\n,[primarycontactid_entitytype]\n,[parentaccountid]\n,[parentaccountid_entitytype]\n,[owningbusinessunit]\n,[owningbusinessunit_entitytype]\n,[modifiedby]\n,[modifiedby_entitytype]\n,[modifiedonbehalfby]\n,[modifiedonbehalfby_entitytype]\n,[owninguser]\n,[owninguser_entitytype]\n,[owningteam]\n,[owningteam_entitytype]\n,[preferredequipmentid]\n,[preferredequipmentid_entitytype]\n,[createdonbehalfby]\n,[createdonbehalfby_entitytype]\n,[masterid]\n,[masterid_entitytype]\n,[modifiedbyexternalparty]\n,[modifiedbyexternalparty_entitytype]\n,[defaultpricelevelid]\n,[defaultpricelevelid_entitytype]\n,[msdyn_accountkpiid]\n,[msdyn_accountkpiid_entitytype]\n,[createdby]\n,[createdby_entitytype]\n,[preferredsystemuserid]\n,[preferredsystemuserid_entitytype]\n,[ownerid]\n,[ownerid_entitytype]\n,[aging90]\n,[aging30]\n,[openrevenue]\n,[aging60_base]\n,[creditlimit]\n,[revenue]\n,[marketcap]\n,[openrevenue_base]\n,[aging60]\n,[creditlimit_base]\n,[revenue_base]\n,[aging90_base]\n,[marketcap_base]\n,[aging30_base]\n,[emailaddress3]\n,[emailaddress2]\n,[emailaddress1]\n,[masteraccountidyominame]\n,[address1_city]\n,[modifiedon]\n,[overriddencreatedon]\n,[websiteurl]\n,[address1_longitude]\n,[createdbyexternalpartyname]\n,[sharesoutstanding]\n,[transactioncurrencyidname]\n,[yominame]\n,[preferredsystemuseridyominame]\n,[opendeals_date]\n,[modifiedbyexternalpartyyominame]\n,[masteraccountidname]\n,[preferredsystemuseridname]\n,[address2_stateorprovince]\n,[address2_country]\n,[address2_line2]\n,[address1_line3]\n,[onholdtime]\n,[owningbusinessunitname]\n,[originatingleadidname]\n,[parentaccountidname]\n,[address1_utcoffset]\n,[numberofemployees]\n,[modifiedbyexternalpartyname]\n,[exchangerate]\n,[address2_county]\n,[telephone3]\n,[address2_city]\n,[address2_latitude]\n,[createdon]\n,[address1_composite]\n,[opendeals_state]\n,[address2_postalcode]\n,[lastusedincampaign]\n,[processid]\n,[owneridyominame]\n,[entityimage_url]\n,[teamsfollowed]\n,[address2_line3]\n,[description]\n,[timezoneruleversionnumber]\n,[address1_county]\n,[createdbyname]\n,[address1_line1]\n,[address2_postofficebox]\n,[address2_telephone1]\n,[address2_telephone2]\n,[address2_telephone3]\n,[originatingleadidyominame]\n,[preferredequipmentidname]\n,[address1_addressid]\n,[traversedpath]\n,[territoryidname]\n,[address1_telephone2]\n,[createdonbehalfbyname]\n,[address2_name]\n,[openrevenue_state]\n,[primarysatoriid]\n,[name]\n,[entityimageid]\n,[timespentbymeonemailandmeetings]\n,[primarytwitterid]\n,[owneridname]\n,[entityimage_timestamp]\n,[createdonbehalfbyyominame]\n,[address2_composite]\n,[address1_country]\n,[address1_stateorprovince]\n,[preferredserviceidname]\n,[modifiedonbehalfbyname]\n,[createdbyexternalpartyyominame]\n,[address2_line1]\n,[address1_telephone1]\n,[primarycontactidname]\n,[address1_telephone3]\n,[address1_postofficebox]\n,[slainvokedidname]\n,[fax]\n,[sic]\n,[address2_utcoffset]\n,[stageid]\n,[accountnumber]\n,[address2_fax]\n,[owneridtype]\n,[address2_longitude]\n,[ftpsiteurl]\n,[address1_primarycontactname]\n,[modifiedbyyominame]\n,[lastonholdtime]\n,[address1_line2]\n,[modifiedonbehalfbyyominame]\n,[openrevenue_date]\n,[address2_upszone]\n,[address1_postalcode]\n,[tickersymbol]\n,[utcconversiontimezonecode]\n,[defaultpricelevelidname]\n,[stockexchange]\n,[importsequencenumber]\n,[msdyn_accountkpiidname]\n,[telephone2]\n,[versionnumber]\n,[accountid]\n,[telephone1]\n,[address1_name]\n,[address1_fax]\n,[address1_latitude]\n,[primarycontactidyominame]\n,[modifiedbyname]\n,[createdbyyominame]\n,[address1_upszone]\n,[address2_addressid]\n,[slaname]\n,[parentaccountidyominame]\n,[address2_primarycontactname]\n,[opendeals]\n FROM [dataverse_salestrial_unqf701ccb0df97422f9db2220d5d6bf].[dbo].[account]",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "dataverse_salestrial_unqf701ccb0df97422f9db2220d5d6bf",
+						"poolName": "Built-in"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Revenue Summary')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "ws1sparkpool1",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "28g",
+					"driverCores": 4,
+					"executorMemory": "28g",
+					"executorCores": 4,
+					"numExecutors": 2,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "08ac55c9-f3a0-461b-a7a3-e58167df9989"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"enableDebugMode": false,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
+					},
+					"language_info": {
+						"name": "sql"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/3640c219-0e7f-41e8-8323-e5492b907e14/resourceGroups/dataverse-synapselink-demo/providers/Microsoft.Synapse/workspaces/ubadevuwmvvdr4tlqvmpocws1/bigDataPools/ws1sparkpool1",
+						"name": "ws1sparkpool1",
+						"type": "Spark",
+						"endpoint": "https://ubadevuwmvvdr4tlqvmpocws1.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/ws1sparkpool1",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net"
+						},
+						"sparkVersion": "2.4",
+						"nodeCount": 5,
+						"cores": 4,
+						"memory": 28
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"<h1>Update the Databasename with your Dataverse Databasename.</h1>\r\n",
+							"<img src=\"https://synapse1poc.blob.core.windows.net/dataverselnksynp/Dataverse_DB.gif\" alt=\"Surface Device\" width=\"75%\"/>\r\n",
+							"\r\n",
+							"\t"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"microsoft": {
+								"language": "sparksql"
+							},
+							"collapsed": false
+						},
+						"source": [
+							"%%sql\r\n",
+							"USE  dataverse_salestrial_unqf701ccb0df97422f9db2220d5d6bf"
+						],
+						"outputs": [],
+						"execution_count": 5
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"<h1>Identify revenue distribution from leads, opportunities, and accounts with matplotlib.</h1>\r\n",
+							"\r\n",
+							"<img src=\"https://synapse1poc.blob.core.windows.net/dataverselnksynp/RS_loa.png\" alt=\"Surface Device\" width=\"75%\"/>"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"microsoft": {
+								"language": "python"
+							}
+						},
+						"source": [
+							"%%pyspark\r\n",
+							"import pandas as pd\r\n",
+							"import matplotlib.pyplot as plt\r\n",
+							"#Get the Data\r\n",
+							"df = spark.sql(\"\"\"\r\n",
+							"    SELECT revenue, 'account' as source FROM account UNION\r\n",
+							"    SELECT revenue, 'lead' as source FROM lead UNION \r\n",
+							"    SELECT totalamount_base, 'opportunity' as source FROM opportunity\r\n",
+							"\"\"\")\r\n",
+							"#Summarize the Data\r\n",
+							"pdf = df.toPandas()\r\n",
+							"revenue_data = pdf.groupby(\"source\")[[\"revenue\"]].sum()\r\n",
+							"#Format the Plot\r\n",
+							"my_colors = ['green','red', 'yellow']\r\n",
+							"\r\n",
+							"plt.pie(revenue_data[\"revenue\"], labels = revenue_data.index, autopct = '%1.1f%%', colors = my_colors)\r\n",
+							"plt.show()"
+						],
+						"outputs": [],
+						"execution_count": 6
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"<h1>Display potential revenue from leads and opportunities on a quarterly basis.</h1>\r\n",
+							"\r\n",
+							"<img src=\"https://synapse1poc.blob.core.windows.net/dataverselnksynp/RS_qb.png\" alt=\"Surface Device\" width=\"75%\"/>"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"microsoft": {
+								"language": "python"
+							}
+						},
+						"source": [
+							"%%pyspark\r\n",
+							"import pandas as pd\r\n",
+							"import matplotlib.pyplot as plt\r\n",
+							"#Get the Leads Data\r\n",
+							"df = spark.sql(\"\"\"\r\n",
+							"    SELECT revenue, purchasetimeframe, 'lead' as source FROM lead\r\n",
+							"\"\"\")\r\n",
+							"#Summarize the Data\r\n",
+							"pdf = df.toPandas()\r\n",
+							"data = pdf.groupby(['purchasetimeframe'])[['revenue']].sum()\r\n",
+							"\r\n",
+							"plt.bar(data.index, data[\"revenue\"], color = \"blue\", label = \"Lead\")\r\n",
+							"#Get the Opportunity Data\r\n",
+							"df = spark.sql(\"\"\"\r\n",
+							"    SELECT totalamount_base, purchasetimeframe, 'opportunity' as source FROM opportunity\r\n",
+							"\"\"\")\r\n",
+							"#Summairze the Data\r\n",
+							"pdf = df.toPandas()\r\n",
+							"data = pdf.groupby([\"purchasetimeframe\"])[[\"totalamount_base\"]].sum()\r\n",
+							"\r\n",
+							"plt.bar(data.index, data[\"totalamount_base\"], color = \"orange\", label = \"Opportunity\")\r\n",
+							"#Format the Plot\r\n",
+							"plt.xticks(ticks=[-1, 0, 1, 2, 3, 4], labels=[\"\", \"Q1\", \"Q2\", \"Q3\", \"Q4\", \"This Year\"])\r\n",
+							"plt.yticks(ticks= [0.e+00, 2.e+07, 4.e+07, 6.e+07, 8.e+07, 1.e+08], labels=[\"$0\", \"$20M\", \"$40M\", \"$60M\", \"$80M\", \"$100M\"])\r\n",
+							"plt.legend()\r\n",
+							"plt.show()"
+						],
+						"outputs": [],
+						"execution_count": 7
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"<h1>Identify the contact information for each account by joining the Dataverse tables into a new Spark Table</h1>"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"microsoft": {
+								"language": "python"
+							},
+							"collapsed": false
+						},
+						"source": [
+							"%%pyspark\r\n",
+							"#Join Datasets\r\n",
+							"df = spark.sql(\"\"\"\r\n",
+							" SELECT a.Id AS account_ID, a.name AS account_name, b.fullname AS contact_name, b.emailaddress1 AS contact_email, b.donotemail\r\n",
+							" FROM\r\n",
+							" dataverse_salestrial_unqf701ccb0df97422f9db2220d5d6bf.account a\r\n",
+							" INNER JOIN\r\n",
+							" (\r\n",
+							"     SELECT parentcustomerid, fullname, emailaddress1, donotemail\r\n",
+							"     FROM \r\n",
+							"     dataverse_salestrial_unqf701ccb0df97422f9db2220d5d6bf.contact\r\n",
+							") b\r\n",
+							"ON a.Id = b.parentcustomerid\r\n",
+							"\"\"\")\r\n",
+							"\r\n",
+							"#Write Joined Dataset to Spark Table\r\n",
+							"df.write.mode(\"overwrite\").saveAsTable(\"default.AccountEmails\")\r\n",
+							"\r\n",
+							"#Read the Spark Table\r\n",
+							"display(df)"
+						],
+						"outputs": [],
+						"execution_count": 9
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Top100RowsDataverseAccount Table')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "ws1sparkpool1",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "28g",
+					"driverCores": 4,
+					"executorMemory": "28g",
+					"executorCores": 4,
+					"numExecutors": 2,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "09e03cf0-3384-416b-a3f8-55be675a6086"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"enableDebugMode": false,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
+					},
+					"language_info": {
+						"name": "python"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/3640c219-0e7f-41e8-8323-e5492b907e14/resourceGroups/dataverse-synapselink-demo/providers/Microsoft.Synapse/workspaces/ubadevuwmvvdr4tlqvmpocws1/bigDataPools/ws1sparkpool1",
+						"name": "ws1sparkpool1",
+						"type": "Spark",
+						"endpoint": "https://ubadevuwmvvdr4tlqvmpocws1.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/ws1sparkpool1",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net"
+						},
+						"sparkVersion": "2.4",
+						"nodeCount": 5,
+						"cores": 4,
+						"memory": 28,
+						"automaticScaleJobs": false
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "code",
+						"metadata": {},
+						"source": [
+							"%%pyspark\n",
+							"df = spark.sql(\"SELECT * FROM `dataverse_salestrial_unqf701ccb0df97422f9db2220d5d6bf`.`account`\")\n",
+							"# df.show(10)"
+						],
+						"outputs": [],
+						"execution_count": 1
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/ws1sparkpool1')]",
+			"type": "Microsoft.Synapse/workspaces/bigDataPools",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"autoPause": {
+					"enabled": true,
+					"delayInMinutes": 15
+				},
+				"autoScale": {
+					"enabled": true,
+					"maxNodeCount": 25,
+					"minNodeCount": 3
+				},
+				"nodeCount": 5,
+				"nodeSize": "Small",
+				"nodeSizeFamily": "MemoryOptimized",
+				"sparkVersion": "2.4",
+				"isComputeIsolationEnabled": false,
+				"sessionLevelPackagesEnabled": false,
+				"annotations": []
+			},
+			"dependsOn": [],
+			"location": "westus"
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/ubadevuwmvvdr4tlqvmpocws1p1')]",
+			"type": "Microsoft.Synapse/workspaces/sqlPools",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"collation": "SQL_Latin1_General_CP1_CI_AS",
+				"maxSizeBytes": 263882790666240,
+				"annotations": []
+			},
+			"dependsOn": [],
+			"location": "westus"
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/default')]",
+			"type": "Microsoft.Synapse/workspaces/managedVirtualNetworks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {},
+			"dependsOn": []
+		}
+	]
+}
