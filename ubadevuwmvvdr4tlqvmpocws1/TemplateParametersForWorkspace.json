@@ -5,8 +5,14 @@
 		"workspaceName": {
 			"value": "ubadevuwmvvdr4tlqvmpocws1"
 		},
+		"Dynamics1_password": {
+			"value": ""
+		},
 		"DeltaLake_properties_typeProperties_url": {
 			"value": "https://ubadevuwmvvdr4tlqvmpoc.dfs.core.windows.net"
+		},
+		"Dynamics1_properties_typeProperties_username": {
+			"value": "stuba@ubadev.onmicrosoft.com"
 		},
 		"dataverse_properties_typeProperties_url": {
 			"value": "https://ubadevuwmvvdr4tlqvmpoc.dfs.core.windows.net"
