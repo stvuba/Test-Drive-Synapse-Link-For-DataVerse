@@ -1,0 +1,35 @@
+{
+	"name": "CreateDelta",
+	"properties": {
+		"activities": [
+			{
+				"name": "CreateDeltaTables",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "1.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "createDelta",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine",
+					"continuationSettings": {
+						"customizedCheckpointKey": "0a46f864-0d8d-4d41-8613-8479994042c8"
+					}
+				}
+			}
+		],
+		"annotations": []
+	}
+}
