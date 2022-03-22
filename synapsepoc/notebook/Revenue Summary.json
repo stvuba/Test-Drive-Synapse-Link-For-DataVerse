@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "08ac55c9-f3a0-461b-a7a3-e58167df9989"
+				"spark.autotune.trackingId": "5dd7be70-d4d2-4dfc-9ff3-6c0cea6d8321"
 			}
 		},
 		"metadata": {
@@ -85,7 +85,7 @@
 					"%%sql\r\n",
 					"USE  dataverse_salestrial_unqf701ccb0df97422f9db2220d5d6bf"
 				],
-				"execution_count": 5
+				"execution_count": 11
 			},
 			{
 				"cell_type": "markdown",
@@ -137,7 +137,7 @@
 					"plt.pie(revenue_data[\"revenue\"], labels = revenue_data.index, autopct = '%1.1f%%', colors = my_colors)\r\n",
 					"plt.show()"
 				],
-				"execution_count": 6
+				"execution_count": 12
 			},
 			{
 				"cell_type": "markdown",
@@ -198,7 +198,7 @@
 					"plt.legend()\r\n",
 					"plt.show()"
 				],
-				"execution_count": 7
+				"execution_count": 13
 			},
 			{
 				"cell_type": "markdown",
@@ -252,7 +252,7 @@
 					"#Read the Spark Table\r\n",
 					"display(df)"
 				],
-				"execution_count": 9
+				"execution_count": 14
 			}
 		]
 	}
