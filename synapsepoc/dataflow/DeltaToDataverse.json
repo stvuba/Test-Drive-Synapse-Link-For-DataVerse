@@ -550,7 +550,7 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> selectAttributes",
 				"selectAttributes sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
+				"     validateSchema: true,",
 				"     deletable:false,",
 				"     insertable:true,",
 				"     updateable:false,",
