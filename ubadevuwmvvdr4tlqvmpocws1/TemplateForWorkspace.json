@@ -817,7 +817,7 @@
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true) ~> selectAttributes",
 						"selectAttributes sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
+						"     validateSchema: true,",
 						"     deletable:false,",
 						"     insertable:true,",
 						"     updateable:false,",
@@ -1970,7 +1970,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "8fa0843b-ef87-49dc-9277-8b1bf8e8da23"
+						"spark.autotune.trackingId": "e945f2ec-32ab-4560-94e0-3206c28da401"
 					}
 				},
 				"metadata": {
