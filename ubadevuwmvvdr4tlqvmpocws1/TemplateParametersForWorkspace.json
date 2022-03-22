@@ -5,6 +5,12 @@
 		"workspaceName": {
 			"value": "ubadevuwmvvdr4tlqvmpocws1"
 		},
+		"DeltaLake_properties_typeProperties_url": {
+			"value": "https://ubadevuwmvvdr4tlqvmpoc.dfs.core.windows.net"
+		},
+		"dataverse_properties_typeProperties_url": {
+			"value": "https://ubadevuwmvvdr4tlqvmpoc.dfs.core.windows.net"
+		},
 		"keyVaultLinkedservice_properties_typeProperties_baseUrl": {
 			"value": "@{concat('https://',linkedService().keyVaultName,'.vault.azure.net/')}"
 		}
