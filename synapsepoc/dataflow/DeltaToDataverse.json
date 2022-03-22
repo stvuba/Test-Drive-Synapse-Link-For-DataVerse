@@ -545,18 +545,29 @@
 				"          account_Name = name,",
 				"          contact_name = fullname,",
 				"          contact_email = ContactDeltaInput@emailaddress1,",
-				"          donotemail = ContactDeltaInput@donotemail",
+				"          donotemail = ContactDeltaInput@donotemail,",
+				"          ownerid = ContactDeltaInput@ownerid,",
+				"          statecode = AccountDeltaInput@statecode",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> selectAttributes",
 				"selectAttributes sink(allowSchemaDrift: true,",
-				"     validateSchema: true,",
+				"     validateSchema: false,",
 				"     deletable:false,",
 				"     insertable:true,",
 				"     updateable:false,",
 				"     upsertable:false,",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> dataverseAccountEmailsTableOut"
+				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          account_ID,",
+				"          account_Name,",
+				"          contact_name,",
+				"          contact_email,",
+				"          donotemail,",
+				"          ownerid,",
+				"          statecode",
+				"     )) ~> dataverseAccountEmailsTableOut"
 			]
 		}
 	}
