@@ -25,6 +25,62 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('workspaceName'), '/CreateDelta')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "CreateDeltaTables",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "createDelta",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"dataverseAccountTableToDelta": {},
+									"dataverseContactTableToDelta": {},
+									"dataverseOpptysTableToDelta": {},
+									"dataverseLeadsTable": {},
+									"OpptyDeltaOut": {},
+									"accountDeltaOut": {},
+									"contactDeltaOut": {},
+									"leadsDeltaOut": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine",
+							"continuationSettings": {
+								"customizedCheckpointKey": "0a46f864-0d8d-4d41-8613-8479994042c8"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/dataflows/createDelta')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/DeltaLake')]",
 			"type": "Microsoft.Synapse/workspaces/linkedServices",
 			"apiVersion": "2019-06-01-preview",
@@ -1243,7 +1299,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "90ad537a-989f-4db6-8013-e71bf28939d6"
+						"spark.autotune.trackingId": "8d9cdf01-5132-4f70-9c32-deb60e064077"
 					}
 				},
 				"metadata": {
@@ -1595,19 +1651,6 @@
 			"type": "Microsoft.Synapse/workspaces/managedVirtualNetworks",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/Pipeline 1')]",
-			"type": "Microsoft.Synapse/workspaces/pipelines",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"annotations": []
-			},
 			"dependsOn": []
 		}
 	]
